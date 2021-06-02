@@ -7,11 +7,7 @@ async function getSignal(interval) {
     let kumoResult;
     let close = false;
 
-    if (
-      kumo.tenkan > kumo.kijun &&
-      kumo.spanAFuture > kumo.spanBFuture &&
-      kumo.price > kumo.tenkan
-    ) {
+    if (kumo.tenkan > kumo.kijun && kumo.spanAFuture > kumo.spanBFuture) {
       console.log("Bullish");
       kumoResult = true;
     } else if (
