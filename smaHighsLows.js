@@ -1,16 +1,30 @@
-function getSma(high, low, periods) {
-  const sliceHigh = high.slice(1, periods + 1);
-  const sliceLow = low.slice(1, periods + 1);
+function getHL(high, low, periods, start = 1) {
+  const sliceHigh = high.slice(start, periods + 1);
+  const sliceLow = low.slice(start, periods + 1);
 
-  const highLow = sliceHigh.concat(sliceLow);
+  const highNumber = Math.max(...sliceHigh);
+  const lowNumber = Math.min(...sliceLow);
 
-  const reduce = highLow.reduce(
-    (accumulator, current) => +accumulator + +current
-  );
+  return (highNumber + lowNumber) / 2;
 
-  const result = reduce / highLow.length;
+  // const sliceHigh = high.slice(start, periods + 1);
+  // const sliceLow = low.slice(start, periods + 1);
 
-  return result;
+  // const reduceHigh = sliceHigh.reduce(
+  //   (accumulator, current) => +accumulator + +current
+  // );
+  // const resultHigh = reduceHigh / sliceHigh.length;
+
+  // const reduceLow = sliceLow.reduce(
+  //   (accumulator, current) => +accumulator + +current
+  // );
+  // const resultLow = reduceLow / sliceLow.length;
+
+  // const result = (resultHigh + resultLow) / 2;
+
+  // return result;
 }
 
-module.exports = getSma;
+module.exports = getHL;
+
+// one actual, one 30 candles behind

@@ -1,5 +1,5 @@
 const api = require("./api");
-const getSma = require("./smaHighsLows");
+const getHL = require("./smaHighsLows");
 
 async function getIchimoku(
   interval,
@@ -15,7 +15,7 @@ async function getIchimoku(
 
     // The spans have to have a number 30 candles behind and updated
 
-    const lengthTotal = Math.max(lengthOne, lengthTwo, lengthFour) * 30;
+    const lengthTotal = Math.max(lengthOne, lengthTwo, lengthFour);
 
     const data = await api.klines(process.env.SYMBOL, lengthTotal, interval);
 
@@ -23,17 +23,18 @@ async function getIchimoku(
     const high = data.high;
     const low = data.low;
 
-    let tenkan = getSma(high, low, lengthOne);
-    let kijun = getSma(high, low, lengthTwo);
+    let tenkan = getHL(high, low, lengthOne);
+    let kijun = getHL(high, low, lengthTwo);
     let spanA =
-      (getSma(high, low, lengthOne + 30) + getSma(high, low, lengthTwo + 30)) /
+      (getHL(high, low, lengthOne + 30, 31) +
+        getHL(high, low, lengthTwo + 30, 31)) /
       2;
-    let spanB = getSma(high, low, lengthFour + 30);
+    let spanB = getHL(high, low, lengthFour + 30, 31);
     let spanAFuture = (tenkan + kijun) / 2;
-    let spanBFuture = getSma(high, low, lengthFour);
+    let spanBFuture = getHL(high, low, lengthFour);
 
     console.log({
-      price: close[1],
+      price: parseFloat(close[1]),
       tenkan: tenkan,
       kijun: kijun,
       spanAPast: spanA,
@@ -43,7 +44,7 @@ async function getIchimoku(
     });
 
     return {
-      price: close[close.length - 1],
+      price: parseFloat(close[1]),
       tenkan: tenkan,
       kijun: kijun,
       spanAPast: spanA,

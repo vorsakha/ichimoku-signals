@@ -22,7 +22,7 @@ async function getSignal(interval) {
       kumo.price > kumo.spanBPast &&
       kumo.price > kumo.spanAPast
     ) {
-      console.log("Close trade");
+      console.log("Weak bull");
       close = true;
     } else if (kumo.kijun > kumo.tenkan) {
       console.log("General sell");
