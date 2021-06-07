@@ -1,34 +1,41 @@
 const getIchimoku = require("./ichimoku");
 
-async function getSignal(interval) {
+async function getSignal(lengthOne, lengthTwo, lengthThree) {
   try {
-    const kumo = await getIchimoku(interval);
+    const kumo = await getIchimoku(lengthOne, lengthTwo, lengthThree);
     let didiResult;
     let kumoResult;
     let close = false;
 
-    if (kumo.tenkan > kumo.kijun && kumo.spanAFuture > kumo.spanBFuture) {
-      console.log("Bullish");
+    if (
+      kumo.tenkan > kumo.kijun &&
+      kumo.spanAFuture > kumo.spanBFuture &&
+      kumo.price > kumo.spanAPast &&
+      kumo.price > kumo.spanBPast &&
+      kumo.chikou === "BULL"
+    ) {
+      console.log("-Bullish");
       kumoResult = true;
     } else if (
       kumo.tenkan < kumo.kijun &&
       kumo.price < kumo.spanBPast &&
-      kumo.price < kumo.spanAPast
+      kumo.price < kumo.spanAPast &&
+      kumo.chikou === "BEAR"
     ) {
-      console.log("Bearish");
+      console.log("-Bearish");
       kumoResult = false;
     } else if (
       kumo.tenkan < kumo.kijun &&
       kumo.price > kumo.spanBPast &&
       kumo.price > kumo.spanAPast
     ) {
-      console.log("Weak bull");
+      console.log("-Weak bull");
       close = true;
     } else if (kumo.kijun > kumo.tenkan) {
-      console.log("General sell");
+      console.log("-General sell");
       kumoResult = false;
     } else {
-      console.log("Weak");
+      console.log("-Weak");
       kumoResult = false;
     }
 
